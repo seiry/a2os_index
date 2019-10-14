@@ -1,5 +1,5 @@
 <template>
-  <div id="sidebar">
+  <div id="sidebar" :class="show ? '' : 'inactive'">
     <div class="inner">
       <!-- Menu -->
       <nav id="menu">
@@ -43,13 +43,43 @@
         <p class="copyright">@a2os.club 2018-2019 All rights reserved.</p>
       </footer>
     </div>
+    <a href="#sidebar" class="toggle" @click="toggle">Toggle</a>
   </div>
 </template>
 
 <script>
+import breakpoints from 'breakpoints-js'
 export default {
   name: "Sider",
-  props: {}
+  props: {},
+  data() {
+    return {
+      show: true
+    }
+  },
+  methods: {
+    toggle(){
+      this.show = !this.show
+    }
+  },
+  mounted() {
+
+    // Inactive by default on <= large.
+    breakpoints.on('<=large', function() {
+      $sidebar.addClass('inactive');
+    })
+
+    breakpoints.on('>large', function() {
+      $sidebar.removeClass('inactive');
+    })
+
+    // Hack: Workaround for Chrome/Android scrollbar position bug.
+    // if (browser.os == 'android'
+    // &&  browser.name == 'chrome')
+    //   $('<style>#sidebar .inner::-webkit-scrollbar { display: none; }</style>')
+    //     .appendTo($head);
+
+  },
 };
 </script>
 
